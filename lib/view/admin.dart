@@ -2,7 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:restaurant_app/view/componentes/adminAddProduct.dart';
 import 'package:restaurant_app/view/componentes/adminCatInsert.dart';
+import 'package:restaurant_app/view/componentes/adminCatList.dart';
+import 'package:restaurant_app/view/componentes/adminListProducto.dart';
 import 'package:restaurant_app/view/login.dart';
 
 class AdminPage extends StatefulWidget {
@@ -27,7 +30,7 @@ class _AdminPageState extends State<AdminPage> {
     return Scaffold(
       //1. Creamos el drawer
       appBar: AppBar(
-        title: Text('Sistema de pedidos '),
+        title: Text('Categorías'),
         backgroundColor: Color.fromARGB(255, 5, 139, 34),
       ),
       drawer: Drawer(
@@ -96,9 +99,9 @@ class _AdminPageState extends State<AdminPage> {
                     ),
                     //Categoria
                     ListTile(
-                      leading: Icon(Icons.category),
+                      leading: Icon(Icons.add),
                       title: Text(
-                        'Categoria',
+                        'Agregar categoría',
                         style: TextStyle(fontSize: 18),
                       ),
                       onTap: () {
@@ -109,22 +112,51 @@ class _AdminPageState extends State<AdminPage> {
                                     AdminCatInsert(widget.user, widget.name)));
                       },
                     ),
-                    //Producto
                     ListTile(
-                      leading: Icon(Icons.ad_units),
+                      leading: Icon(Icons.view_list),
                       title: Text(
-                        'Producto',
+                        'Lista de categorías',
                         style: TextStyle(fontSize: 18),
                       ),
                       onTap: () {
-                        /*   Navigator.pushReplacement(
+                        Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => EmpleadoView())); */
+                                builder: (context) =>
+                                    AdminCatList(widget.user, widget.name)));
+                      },
+                    ),
+                    //Producto
+                    ListTile(
+                      leading: Icon(Icons.add),
+                      title: Text(
+                        'Agregar producto',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    AdminAddProduct(widget.user, widget.name)));
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.view_list),
+                      title: Text(
+                        'Lista de productos',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AdminListProduct(
+                                    widget.user, widget.name)));
                       },
                     ),
                     SizedBox(
-                      height: 210,
+                      height: 100,
                     ),
                     Divider(),
                     ListTile(

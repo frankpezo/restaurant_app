@@ -6,6 +6,9 @@ import 'package:restaurant_app/view/componentes/adminCatList.dart';
 import '../login.dart';
 import 'package:http/http.dart' as http;
 
+import 'adminAddProduct.dart';
+import 'adminListProducto.dart';
+
 class AdminCatInsert extends StatefulWidget {
   String user;
   String name;
@@ -74,8 +77,9 @@ class _AdminCatInsertState extends State<AdminCatInsert> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //1. Creamos el drawer
       appBar: AppBar(
-        title: Text('Insertar categoría'),
+        title: Text('Agregar categoría'),
         backgroundColor: Color.fromARGB(255, 5, 139, 34),
       ),
       drawer: Drawer(
@@ -136,43 +140,72 @@ class _AdminCatInsertState extends State<AdminCatInsert> {
                         style: TextStyle(fontSize: 18),
                       ),
                       onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    AdminPage(widget.user, widget.name)));
-                      },
-                    ),
-                    //Categoria
-                    ListTile(
-                      leading: Icon(Icons.category),
-                      title: Text(
-                        'Categoria',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      onTap: () {
-                        /*  Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AdminCatInsert())); */
-                      },
-                    ),
-                    //Producto
-                    ListTile(
-                      leading: Icon(Icons.ad_units),
-                      title: Text(
-                        'Producto',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      onTap: () {
-                        /*   Navigator.pushReplacement(
+                        /*           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => EmpleadoView())); */
                       },
                     ),
+                    //Categoria
+                    ListTile(
+                      leading: Icon(Icons.add),
+                      title: Text(
+                        'Agregar categoría',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    AdminCatInsert(widget.user, widget.name)));
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.view_list),
+                      title: Text(
+                        'Lista de categorías',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    AdminCatList(widget.user, widget.name)));
+                      },
+                    ),
+                    //Producto
+                    ListTile(
+                      leading: Icon(Icons.add),
+                      title: Text(
+                        'Agregar producto',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    AdminAddProduct(widget.user, widget.name)));
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.view_list),
+                      title: Text(
+                        'Lista de productos',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AdminListProduct(
+                                    widget.user, widget.name)));
+                      },
+                    ),
                     SizedBox(
-                      height: 210,
+                      height: 100,
                     ),
                     Divider(),
                     ListTile(
@@ -212,7 +245,7 @@ class _AdminCatInsertState extends State<AdminCatInsert> {
                     //2. Para acceder
                     controller: name,
                     obscureText: false,
-                    keyboardType: TextInputType.emailAddress,
+                    keyboardType: TextInputType.text,
 
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.all(10),
@@ -289,19 +322,6 @@ class _AdminCatInsertState extends State<AdminCatInsert> {
                 ),
 
                 //Para poder visualizar los datos
-                Container(
-                    margin: EdgeInsets.all(10),
-                    child: Builder(builder: (BuildContext context) {
-                      return ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AdminCatList()));
-                        },
-                        child: Text('Visualizar datos'),
-                      );
-                    })),
               ],
             ),
           ),

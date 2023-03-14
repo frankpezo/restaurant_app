@@ -1,90 +1,26 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/view/componentes/admiCatEdit.dart';
 
 import '../login.dart';
 import 'adminAddProduct.dart';
 import 'adminCatInsert.dart';
-import 'adminListProducto.dart';
-import 'package:http/http.dart' as http;
+import 'adminCatList.dart';
 
-class AdminCatList extends StatefulWidget {
+class AdminListProduct extends StatefulWidget {
   String user;
   String name;
-  AdminCatList(this.user, this.name);
+  AdminListProduct(this.user, this.name);
 
   @override
-  State<AdminCatList> createState() => _AdminCatListState();
+  State<AdminListProduct> createState() => _AdminListProductState();
 }
 
-class _AdminCatListState extends State<AdminCatList> {
-  //1. Creamos una lista donde colocaremos los datos traídos con la Api
-  List userData = [];
-
-  //3. Creamos una función para eliminar un elemento de la lista
-  Future<void> deleteCat(String id) async {
-    //3.1. Traemos el el link
-    Uri url = Uri.parse("http://10.0.2.2/cajuephp/deleteCat.php");
-    //3.1. Realizmos un try-catch
-    try {
-      //3.1.1. Realizamos la petición usando el post
-      var res = await http.post(url, body: {"id": id});
-      //3.2. Verificamos
-      var response = jsonDecode(res.body);
-      if (response['success'] == "true") {
-        print('Se eliminó con éxito');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Color.fromARGB(255, 0, 237, 32),
-          content: Text(
-            'Categoría eliminada con éxito',
-            style: TextStyle(
-                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          duration: Duration(seconds: 5),
-        ));
-        //3.3. Colocamos aquí el método de obtener datos para poder obtener el id
-        getDatos();
-      } else {
-        print('Algo salió mal');
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  //2. Creamos la función para traer los datos
-  Future<void> getDatos() async {
-    //2.1. Traemos el link
-    Uri url = Uri.parse("http://10.0.2.2/cajuephp/viewListCat.php");
-    //2.1. Hacemos un try - catch
-    try {
-      //2.1.1 Realizamos la petición usando el get
-      var response = await http.get(url);
-      //2.2. Realizamos el setSate para el cambió de estado
-      setState(() {
-        //2.2.1. Utilizamos la variable tipo list que hemos creado antes
-        userData = jsonDecode(response.body);
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  //2.3. Para que pueda suceder el cambio de estado colocamos el método en un initState
-  @override
-  void initState() {
-    // TODO: implement initState
-    getDatos();
-    super.initState();
-  }
-
+class _AdminListProductState extends State<AdminListProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       //1. Creamos el drawer
       appBar: AppBar(
-        title: Text('Lista de categorías'),
+        title: Text('Agregar producto'),
         backgroundColor: Color.fromARGB(255, 5, 139, 34),
       ),
       drawer: Drawer(
@@ -232,74 +168,6 @@ class _AdminCatListState extends State<AdminCatList> {
             ),
           ],
         ),
-      ),
-      body: Container(
-        child: ListView.builder(
-            itemCount: userData.length,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  Card(
-                    child: Container(
-                      padding: EdgeInsets.all(15),
-                      height: 100,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              //Datos
-                              Text(
-                                userData[index]['nombre'],
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                userData[index]['descripcion'],
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              //Iconos
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              IconButton(
-                                  color: Color.fromARGB(255, 245, 147, 0),
-                                  onPressed: () {
-                                    print('Editar');
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => AdminCatEdit(
-                                                widget.user,
-                                                widget.name,
-                                                userData[index]['id_categoria'],
-                                                userData[index]['nombre'],
-                                                userData[index]
-                                                    ['descripcion'])));
-                                  },
-                                  icon: Icon(Icons.edit)),
-                              IconButton(
-                                  color: Colors.redAccent,
-                                  onPressed: () {
-                                    deleteCat(userData[index]['id_categoria']
-                                        .toString());
-                                  },
-                                  icon: Icon(Icons.delete))
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }),
       ),
     );
   }
