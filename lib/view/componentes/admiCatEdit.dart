@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:restaurant_app/view/admin.dart';
 
 import '../login.dart';
 import 'adminAddProduct.dart';
@@ -144,10 +145,11 @@ class _AdminCatEditState extends State<AdminCatEdit> {
                           style: TextStyle(fontSize: 18),
                         ),
                         onTap: () {
-                          /*           Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EmpleadoView())); */
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      AdminPage(widget.user, widget.name)));
                         },
                       ),
                       //Categoria
