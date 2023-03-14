@@ -204,11 +204,11 @@ class _AdminCatListState extends State<AdminCatList> {
                         style: TextStyle(fontSize: 18),
                       ),
                       onTap: () {
-                        Navigator.pushReplacement(
+                        /*   Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AdminListProduct(
-                                    widget.user, widget.name)));
+                                    widget.user, widget.name))); */
                       },
                     ),
                     SizedBox(
@@ -241,64 +241,81 @@ class _AdminCatListState extends State<AdminCatList> {
             itemBuilder: (context, index) {
               return Column(
                 children: [
-                  Card(
-                    child: Container(
-                      padding: EdgeInsets.all(15),
-                      height: 100,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                  GestureDetector(
+                      child: Card(
+                        child: Container(
+                          padding: EdgeInsets.all(15),
+                          height: 100,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              //Datos
-                              Text(
-                                userData[index]['nombre'],
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  //Datos
+                                  Text(
+                                    userData[index]['nombre'],
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    userData[index]['descripcion'],
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  //Iconos
+                                ],
                               ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                userData[index]['descripcion'],
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              //Iconos
+                              Row(
+                                children: [
+                                  IconButton(
+                                      color: Color.fromARGB(255, 245, 147, 0),
+                                      onPressed: () {
+                                        print('Editar');
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AdminCatEdit(
+                                                        widget.user,
+                                                        widget.name,
+                                                        userData[index]
+                                                            ['id_categoria'],
+                                                        userData[index]
+                                                            ['nombre'],
+                                                        userData[index]
+                                                            ['descripcion'])));
+                                      },
+                                      icon: Icon(Icons.edit)),
+                                  IconButton(
+                                      color: Colors.redAccent,
+                                      onPressed: () {
+                                        deleteCat(userData[index]
+                                                ['id_categoria']
+                                            .toString());
+                                      },
+                                      icon: Icon(Icons.delete))
+                                ],
+                              )
                             ],
                           ),
-                          Row(
-                            children: [
-                              IconButton(
-                                  color: Color.fromARGB(255, 245, 147, 0),
-                                  onPressed: () {
-                                    print('Editar');
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => AdminCatEdit(
-                                                widget.user,
-                                                widget.name,
-                                                userData[index]['id_categoria'],
-                                                userData[index]['nombre'],
-                                                userData[index]
-                                                    ['descripcion'])));
-                                  },
-                                  icon: Icon(Icons.edit)),
-                              IconButton(
-                                  color: Colors.redAccent,
-                                  onPressed: () {
-                                    deleteCat(userData[index]['id_categoria']
-                                        .toString());
-                                  },
-                                  icon: Icon(Icons.delete))
-                            ],
-                          )
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
+                      onTap: () {
+                        print('sele');
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AdminListProduct(
+                                    widget.user,
+                                    widget.name,
+                                    userData[index]['id_categoria'].toString(),
+                                    userData[index]['nombre'].toString())));
+                      }),
                 ],
               );
             }),

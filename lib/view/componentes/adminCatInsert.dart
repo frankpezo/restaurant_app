@@ -197,11 +197,11 @@ class _AdminCatInsertState extends State<AdminCatInsert> {
                         style: TextStyle(fontSize: 18),
                       ),
                       onTap: () {
-                        Navigator.pushReplacement(
+                        /*   Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AdminListProduct(
-                                    widget.user, widget.name)));
+                                    widget.user, widget.name))); */
                       },
                     ),
                     SizedBox(

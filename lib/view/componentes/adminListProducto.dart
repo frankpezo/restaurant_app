@@ -1,26 +1,56 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import '../login.dart';
 import 'adminAddProduct.dart';
 import 'adminCatInsert.dart';
 import 'adminCatList.dart';
+import 'package:http/http.dart' as http; //Para consumir la Api
 
 class AdminListProduct extends StatefulWidget {
   String user;
   String name;
-  AdminListProduct(this.user, this.name);
+  String id;
+  String nameCat;
+  AdminListProduct(this.user, this.name, this.id, this.nameCat);
 
   @override
   State<AdminListProduct> createState() => _AdminListProductState();
 }
 
 class _AdminListProductState extends State<AdminListProduct> {
+  //1. Declaramos una lista
+  List userData = [];
+  //2. Función para traer
+  Future<void> getProduct(String id) async {
+    //2.1. Traemos el link
+    Uri url = Uri.parse("http://10.0.2.2/cajuephp/viewProduct.php");
+    //2.2.Try-Catch
+    try {
+      var res = await http.post(url, body: {'id': id.toString()});
+
+      setState(() {
+        userData = jsonDecode(res.body);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+//2.3. initState
+  @override
+  void initState() {
+    super.initState();
+    getProduct(widget.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       //1. Creamos el drawer
       appBar: AppBar(
-        title: Text('Agregar producto'),
+        title: Text(widget.nameCat),
         backgroundColor: Color.fromARGB(255, 5, 139, 34),
       ),
       drawer: Drawer(
@@ -138,11 +168,11 @@ class _AdminListProductState extends State<AdminListProduct> {
                         style: TextStyle(fontSize: 18),
                       ),
                       onTap: () {
-                        Navigator.pushReplacement(
+                        /*   Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AdminListProduct(
-                                    widget.user, widget.name)));
+                                    widget.user, widget.name))); */
                       },
                     ),
                     SizedBox(
@@ -169,6 +199,72 @@ class _AdminListProductState extends State<AdminListProduct> {
           ],
         ),
       ),
+      body: ListView.builder(
+          itemCount: userData.length,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                Card(
+                  child: Container(
+                    padding: EdgeInsets.all(15),
+                    height: 100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        //
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            //Datos
+                            Text(
+                              userData[index]['nombre'].toString(),
+                              //'Nombre',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              userData[index]['precio_venta'].toString(),
+                              // 'Precio',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              userData[index]['descripcion'].toString(),
+                              //'Descripción',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ],
+                        ),
+                        //Iconos
+                        Row(
+                          children: [
+                            IconButton(
+                                color: Color.fromARGB(255, 245, 147, 0),
+                                onPressed: () {
+                                  print('Editar');
+                                },
+                                icon: Icon(Icons.edit)),
+                            IconButton(
+                                color: Colors.redAccent,
+                                onPressed: () {
+                                  print('Eliminar');
+                                },
+                                icon: Icon(Icons.delete))
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }),
     );
   }
 }
