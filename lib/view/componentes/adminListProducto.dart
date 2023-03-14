@@ -161,20 +161,7 @@ class _AdminListProductState extends State<AdminListProduct> {
                                     AdminAddProduct(widget.user, widget.name)));
                       },
                     ),
-                    ListTile(
-                      leading: Icon(Icons.view_list),
-                      title: Text(
-                        'Lista de productos',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      onTap: () {
-                        /*   Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AdminListProduct(
-                                    widget.user, widget.name))); */
-                      },
-                    ),
+
                     SizedBox(
                       height: 100,
                     ),
