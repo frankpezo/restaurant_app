@@ -66,6 +66,17 @@ class _AdminAddProductState extends State<AdminAddProduct> {
         var response = jsonDecode(res.body);
         if (response['success'] == "true") {
           print('Producto insertado');
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Color.fromARGB(255, 0, 237, 32),
+            content: Text(
+              'Producto agregado correctamente',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
+            duration: Duration(seconds: 5),
+          ));
         } else {
           print('Error al insertar');
         }
@@ -74,7 +85,23 @@ class _AdminAddProductState extends State<AdminAddProduct> {
       }
     } else {
       print('Campos vacíos');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Color.fromARGB(255, 242, 48, 48),
+        content: Text(
+          'Los campos no deben quedar vacíos',
+          style: TextStyle(
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        duration: Duration(seconds: 5),
+      ));
     }
+  }
+
+//5. Función para limpiar los campos
+  void cleanText() {
+    name.clear();
+    price.clear();
+    description.clear();
   }
 
   //3.4. Lo iniciamos para que pueda verse
@@ -375,11 +402,29 @@ class _AdminAddProductState extends State<AdminAddProduct> {
                             } */
 
                             setState(() {
-                              insertProduct(
-                                  selectname['id_categoria'].toString());
+                              if (selectname == null) {
+                                print(
+                                    'No se ha seleccionado ninguna categoría');
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 242, 48, 48),
+                                  content: Text(
+                                    'Selecciona una categoría',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  duration: Duration(seconds: 5),
+                                ));
+                              } else {
+                                insertProduct(
+                                    selectname['id_categoria'].toString());
+                                //Para limpiar los campos
+                                cleanText();
+                              }
                             });
-
-                            // print('Hols');
                           },
                           child: Container(
                             width: 330,
