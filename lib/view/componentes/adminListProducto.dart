@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:restaurant_app/view/componentes/adminEditList.dart';
 
 import '../login.dart';
 import 'adminAddProduct.dart';
@@ -22,6 +23,39 @@ class AdminListProduct extends StatefulWidget {
 class _AdminListProductState extends State<AdminListProduct> {
   //1. Declaramos una lista
   List userData = [];
+
+//3. Función para eliminar el producto
+  Future<void> deleteProduct(String id) async {
+    //3.1. Traemos el link
+    Uri url = Uri.parse("http://10.0.2.2/cajuephp/deleteProduct.php");
+    //3.2.Try-Catch
+    try {
+      var res = await http.post(url, body: {'id': id});
+      //3.3. Hacemos la petición
+      var response = jsonDecode(res.body);
+      if (response['success'] == "true") {
+        print('Se eliminó el producto');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Color.fromARGB(255, 0, 237, 32),
+          content: Text(
+            'Se eliminó el producto',
+            style: TextStyle(
+                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          duration: Duration(seconds: 5),
+        ));
+      } else {
+        print('No se eliminó el producto');
+      }
+
+      setState(() {
+        userData = jsonDecode(res.body);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   //2. Función para traer
   Future<void> getProduct(String id) async {
     //2.1. Traemos el link
@@ -42,6 +76,7 @@ class _AdminListProductState extends State<AdminListProduct> {
   @override
   void initState() {
     super.initState();
+    //Para traer el id de la categoría
     getProduct(widget.id);
   }
 
@@ -194,7 +229,7 @@ class _AdminListProductState extends State<AdminListProduct> {
                 Card(
                   child: Container(
                     padding: EdgeInsets.all(15),
-                    height: 100,
+                    height: 120,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -211,20 +246,20 @@ class _AdminListProductState extends State<AdminListProduct> {
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
                             SizedBox(
-                              height: 5,
+                              height: 7,
                             ),
                             Text(
-                              userData[index]['precio_venta'].toString(),
+                              'S/. ${userData[index]['precio_venta'].toString()}',
                               // 'Precio',
-                              style: TextStyle(fontSize: 14),
+                              style: TextStyle(fontSize: 16),
                             ),
                             SizedBox(
-                              height: 5,
+                              height: 7,
                             ),
                             Text(
                               userData[index]['descripcion'].toString(),
                               //'Descripción',
-                              style: TextStyle(fontSize: 14),
+                              style: TextStyle(fontSize: 15),
                             ),
                           ],
                         ),
@@ -235,12 +270,25 @@ class _AdminListProductState extends State<AdminListProduct> {
                                 color: Color.fromARGB(255, 245, 147, 0),
                                 onPressed: () {
                                   print('Editar');
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => AdminEditList(
+                                                widget.user,
+                                                widget.name,
+                                                userData[index]['id_producto'],
+                                                userData[index]['nombre'],
+                                                userData[index]['precio_venta'],
+                                                userData[index]['descripcion'],
+                                              )));
                                 },
                                 icon: Icon(Icons.edit)),
                             IconButton(
                                 color: Colors.redAccent,
                                 onPressed: () {
                                   print('Eliminar');
+                                  deleteProduct(userData[index]['id_producto']
+                                      .toString());
                                 },
                                 icon: Icon(Icons.delete))
                           ],
