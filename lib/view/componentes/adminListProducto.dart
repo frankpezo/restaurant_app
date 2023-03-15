@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/view/componentes/adminEditList.dart';
 
+import '../admin.dart';
 import '../login.dart';
 import 'adminAddProduct.dart';
 import 'adminCatInsert.dart';
@@ -86,14 +87,21 @@ class _AdminListProductState extends State<AdminListProduct> {
       //1. Creamos el drawer
       appBar: AppBar(
         title: Text(widget.nameCat),
-        backgroundColor: Color.fromARGB(255, 5, 139, 34),
+        //  backgroundColor: Color.fromARGB(255, 5, 139, 34),
+        flexibleSpace: Image(
+          image: AssetImage('assets/logo/p2.png'),
+          fit: BoxFit.cover,
+        ),
       ),
       drawer: Drawer(
         child: ListView(
           children: [
             //1.1. Header
             Container(
-              color: Color.fromARGB(255, 5, 139, 34),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/logo/p2.png'),
+                      fit: BoxFit.cover)),
               width: double.infinity,
               height: 200,
               padding: EdgeInsets.only(top: 20.0),
@@ -146,10 +154,11 @@ class _AdminListProductState extends State<AdminListProduct> {
                         style: TextStyle(fontSize: 18),
                       ),
                       onTap: () {
-                        /*           Navigator.pushReplacement(
+                        Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => EmpleadoView())); */
+                                builder: (context) =>
+                                    AdminPage(widget.user, widget.name)));
                       },
                     ),
                     //Categoria
@@ -197,9 +206,6 @@ class _AdminListProductState extends State<AdminListProduct> {
                       },
                     ),
 
-                    SizedBox(
-                      height: 100,
-                    ),
                     Divider(),
                     ListTile(
                       leading: Icon(Icons.exit_to_app),

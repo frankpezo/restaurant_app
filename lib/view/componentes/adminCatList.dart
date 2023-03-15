@@ -86,14 +86,20 @@ class _AdminCatListState extends State<AdminCatList> {
       //1. Creamos el drawer
       appBar: AppBar(
         title: Text('Lista de categorías'),
-        backgroundColor: Color.fromARGB(255, 5, 139, 34),
+        flexibleSpace: Image(
+          image: AssetImage('assets/logo/p2.png'),
+          fit: BoxFit.cover,
+        ),
       ),
       drawer: Drawer(
         child: ListView(
           children: [
             //1.1. Header
             Container(
-              color: Color.fromARGB(255, 5, 139, 34),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/logo/p2.png'),
+                      fit: BoxFit.cover)),
               width: double.infinity,
               height: 200,
               padding: EdgeInsets.only(top: 20.0),
@@ -198,9 +204,6 @@ class _AdminCatListState extends State<AdminCatList> {
                       },
                     ),
 
-                    SizedBox(
-                      height: 100,
-                    ),
                     Divider(),
                     ListTile(
                       leading: Icon(Icons.exit_to_app),

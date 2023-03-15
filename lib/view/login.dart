@@ -217,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
                                         hintStyle:
                                             TextStyle(color: Colors.grey[500]),
                                         suffixIcon: IconButton(
-                                          padding: EdgeInsets.only(bottom: 10),
+                                          padding: EdgeInsets.only(bottom: 5),
                                           onPressed: () => setState(() {
                                             obscurePass = !obscurePass;
                                           }),
@@ -250,7 +250,7 @@ class _LoginPageState extends State<LoginPage> {
                                     },
 
                                     child: Container(
-                                      width: 270,
+                                      width: 263,
                                       height: 40,
                                       margin: EdgeInsets.only(
                                           left: 20, right: 10, top: 20),

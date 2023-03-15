@@ -92,7 +92,10 @@ class _AdminCatEditState extends State<AdminCatEdit> {
             children: [
               //1.1. Header
               Container(
-                color: Color.fromARGB(255, 5, 139, 34),
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/logo/p2.png'),
+                        fit: BoxFit.cover)),
                 width: double.infinity,
                 height: 200,
                 padding: EdgeInsets.only(top: 20.0),
@@ -197,9 +200,6 @@ class _AdminCatEditState extends State<AdminCatEdit> {
                         },
                       ),
 
-                      SizedBox(
-                        height: 100,
-                      ),
                       Divider(),
                       ListTile(
                         leading: Icon(Icons.exit_to_app),
