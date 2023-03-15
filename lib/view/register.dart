@@ -392,7 +392,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         hintStyle:
                                             TextStyle(color: Colors.grey[500]),
                                         suffixIcon: IconButton(
-                                          padding: EdgeInsets.only(bottom: 10),
+                                          padding: EdgeInsets.only(bottom: 5),
                                           onPressed: () => setState(() {
                                             obscurePass = !obscurePass;
                                           }),

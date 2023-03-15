@@ -91,7 +91,6 @@ class _LoginPageState extends State<LoginPage> {
         body: SingleChildScrollView(
       child: Container(
         child: Form(
-          key: formKeyDos,
           child: SafeArea(
               child: Container(
             //Aquí irá el logo
@@ -241,10 +240,7 @@ class _LoginPageState extends State<LoginPage> {
                                     //1. Para que nos lleve a la página deseada
                                     onTap: () {
                                       //Para usar esto debemos crear una llave globar y debe ir dentro de un form
-                                      setState(() {
-                                        if (formKeyDos.currentState!
-                                            .validate()) {}
-                                      });
+
                                       //9.1 Aquí debe ir la función de la API
                                       getDatos();
                                     },

@@ -18,10 +18,30 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
+  //1. Declaramos una lista
+  List userData = [];
+  //2. Funcion para traer los datos
+  Future<void> getData() async {
+    //2.1. Traemos el link
+    Uri url = Uri.parse("http://10.0.2.2/cajuephp/getPeditos.php");
+    //2.2. Hacemos el try-catch
+    try {
+      //2.3. Hacemos la peticion
+      var response = await http.get(url);
+      //2.4. seteamos los datos
+      setState(() {
+        userData = json.decode(response.body);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //2.5. La función lo guardamos en un inistate para que se pueda visualizar los datos
   @override
   void initState() {
     // TODO: implement initState
-
+    getData();
     super.initState();
   }
 
@@ -30,7 +50,7 @@ class _AdminPageState extends State<AdminPage> {
     return Scaffold(
       //1. Creamos el drawer
       appBar: AppBar(
-        title: Text('Categorías'),
+        title: Text('Pedidos'),
         flexibleSpace: Image(
           image: AssetImage('assets/logo/p2.png'),
           fit: BoxFit.cover,
@@ -172,8 +192,84 @@ class _AdminPageState extends State<AdminPage> {
         ),
       ),
 
-      body: Center(
-        child: Text('admin'),
+      body: Container(
+        child: ListView.builder(
+            itemCount: userData.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  Card(
+                    child: Container(
+                      padding: EdgeInsets.all(15),
+                      height: 140,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text('Cliente: ',
+                                      style: TextStyle(
+                                          color: Colors.blueAccent,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold)),
+                                  Text(userData[index]['cliente'],
+                                      style: TextStyle(fontSize: 16)),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text('Total: ',
+                                      style: TextStyle(
+                                          color: Colors.blueAccent,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold)),
+                                  Text('S/. ${userData[index]['total']}',
+                                      style: TextStyle(fontSize: 16)),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text('Fecha: ',
+                                      style: TextStyle(
+                                          color: Colors.blueAccent,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold)),
+                                  Text(userData[index]['fecha_pedido'],
+                                      style: TextStyle(fontSize: 16)),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text('Mesa: ',
+                                  style: TextStyle(
+                                      color: Colors.orangeAccent,
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold)),
+                              Text(userData[index]['num_mesa'],
+                                  style: TextStyle(fontSize: 18)),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }),
       ),
     );
   }

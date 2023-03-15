@@ -85,7 +85,10 @@ class _AdminCatEditState extends State<AdminCatEdit> {
         //1. Creamos el drawer
         appBar: AppBar(
           title: Text('Editar categoría'),
-          backgroundColor: Color.fromARGB(255, 5, 139, 34),
+          flexibleSpace: Image(
+            image: AssetImage('assets/logo/p2.png'),
+            fit: BoxFit.cover,
+          ),
         ),
         drawer: Drawer(
           child: ListView(
