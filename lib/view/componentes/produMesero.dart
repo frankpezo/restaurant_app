@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:restaurant_app/view/componentes/pedidoList.dart';
 
 import '../login.dart';
 import '../mesero.dart';
@@ -21,6 +22,7 @@ class ProduMesero extends StatefulWidget {
 class _ProduMeseroState extends State<ProduMesero> {
   //1. Declaramos una lista
   List userData = [];
+
   //2. Creamos la función para traer los datos
   Future<void> getProducto(String id) async {
     //2.1. Traemos el link
@@ -45,11 +47,51 @@ class _ProduMeseroState extends State<ProduMesero> {
   }
 
   //1.1. Declaramos una variable para el cambiar de color el icono
+  int selectedIndex = 0;
   bool isLiked = false;
+
+  void itemToggleFavorite(int index) {
+    setState(() {
+      selectedIndex = index;
+      isLiked = false;
+    });
+  }
+
   void toogleFavorite() {
     setState(() {
       isLiked = !isLiked;
     });
+  }
+
+  Future<void> favoriteItem(String id) async {
+    //3.1. Traemos el link
+    Uri url = Uri.parse("http://10.0.2.2/cajuephp/mesero/selectProduct.php");
+    //3.2.Try-Catch
+    try {
+      var res = await http.post(url, body: {'id': id});
+      //3.3. Hacemos la petición
+      var response = jsonDecode(res.body);
+      if (response['success'] == "true") {
+        print('Se eliminó el producto');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Color.fromARGB(255, 0, 237, 32),
+          content: Text(
+            'Se eliminó el producto',
+            style: TextStyle(
+                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          duration: Duration(seconds: 5),
+        ));
+      } else {
+        print('No se eliminó el producto');
+      }
+
+      setState(() {
+        userData = jsonDecode(res.body);
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -147,6 +189,20 @@ class _ProduMeseroState extends State<ProduMesero> {
                       },
                     ),
                     //Producto
+                    ListTile(
+                      leading: Icon(Icons.category),
+                      title: Text(
+                        'Pedido',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      onTap: () {
+                        /*    Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    CatMesero(widget.user, widget.name))); */
+                      },
+                    ),
 
                     Divider(),
                     ListTile(
@@ -216,18 +272,23 @@ class _ProduMeseroState extends State<ProduMesero> {
                         Row(
                           children: [
                             IconButton(
-                                onPressed: () {
-                                  print('Favorito');
-                                  toogleFavorite();
-                                  /*  deleteProduct(userData[index]['id_producto']
-                                          .toString()); */
-                                },
-                                icon: Icon(
-                                  isLiked
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                  color: isLiked ? Colors.red : null,
-                                )),
+                              color: Color.fromARGB(255, 245, 147, 0),
+                              onPressed: () {
+                                print('Insertar a pedidos');
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            PedidoProductLista(
+                                              widget.user,
+                                              widget.name,
+                                              userData[index]['nombre'],
+                                              userData[index]['id_producto'],
+                                              userData[index]['precio_venta'],
+                                            )));
+                              },
+                              icon: Icon(Icons.add),
+                            )
                           ],
                         )
                       ],

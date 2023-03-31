@@ -107,6 +107,21 @@ class _MeseroPageState extends State<MeseroPage> {
                       },
                     ),
                     //Producto
+                    //Producto
+                    ListTile(
+                      leading: Icon(Icons.category),
+                      title: Text(
+                        'Pedido',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      onTap: () {
+                        /*    Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    CatMesero(widget.user, widget.name))); */
+                      },
+                    ),
 
                     Divider(),
                     ListTile(
