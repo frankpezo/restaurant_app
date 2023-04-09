@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import '../login.dart';
 import 'catMesero.dart';
+import 'package:http/http.dart' as http; //Para consumir la Api
 
 class PedidoProductLista extends StatefulWidget {
   String user;
@@ -22,12 +25,38 @@ class _PedidoProductListaState extends State<PedidoProductLista> {
   TextEditingController precio = TextEditingController();
   int cant = 0;
   double total = 0;
+
   //1.1. Hacemos el init para cambiar los valores
   @override
   void initState() {
     id.text = widget.id;
     precio.text = widget.precio;
     super.initState();
+  }
+
+  //2. Función para insertar a la base de datos
+  //Pasamos tres parametros para que se envíe en la base de datos
+  Future<void> inserDeta(/* idP, */ cantidad, monto) async {
+    //2.1. Hacemos el try-catch
+    try {
+      //2.2. Traemos el link
+      Uri url = Uri.parse("http://10.0.2.2/cajuephp/mesero/insertDetai.php");
+      var res = await http.post(url, body: {
+        /*   'idP': idP.toString(), */
+        'cantidad': cantidad.toString(),
+        'monto': monto.toString(),
+      });
+
+      print(res.body);
+      /*   var response = jsonDecode(res.body);
+      if (response['success'] == 'true') {
+        print('Se inserto correctamente');
+      } else {
+        print('Error al insertar');
+      } */
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -286,6 +315,8 @@ class _PedidoProductListaState extends State<PedidoProductLista> {
                                   primary: Colors.orange,
                                   minimumSize: Size(10, 10)),
                               onPressed: () {
+                                print('Apretado');
+                                inserDeta(cant, total);
                                 //Para enviar los datos
                                 /*  Navigator.of(context).push(
                                                               MaterialPageRoute(
@@ -306,100 +337,6 @@ class _PedidoProductListaState extends State<PedidoProductLista> {
                           )
                         ],
                       ),
-                      /*   //id
-                      Container(
-                        margin: EdgeInsets.only(left: 20, right: 20),
-                        width: 340,
-                        height: 40,
-                        padding: const EdgeInsets.only(top: 3, left: 15),
-                        child: Visibility(
-                          visible: false,
-                          child: TextFormField(
-                            //2. Para acceder
-                            controller: id,
-                            obscureText: false,
-                            keyboardType: TextInputType.text,
-
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(10),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey)),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.grey.shade400),
-                              ),
-                              fillColor: Colors.white,
-                              filled: true,
-                              hintText: 'id',
-                              hintStyle: TextStyle(color: Colors.grey[500]),
-                            ),
-                          ),
-                        ),
-                      ), */
-                      /*  SizedBox(
-                        height: 15,
-                      ),
-                      //Name
-              
-                      SizedBox(
-                        height: 15,
-                      ), */
-                      //Price
-                      /*    Container(
-                        margin: EdgeInsets.only(left: 20, right: 20),
-                        width: 340,
-                        height: 40,
-                        padding: const EdgeInsets.only(top: 3, left: 15),
-                        child: TextFormField(
-                          //2. Para acceder
-                          controller: precio,
-                          obscureText: false,
-                          keyboardType: TextInputType.number,
-              
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(10),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey)),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey.shade400),
-                            ),
-                            fillColor: Colors.white,
-                            filled: true,
-                            hintText: 'Precio de producto',
-                            hintStyle: TextStyle(color: Colors.grey[500]),
-                          ),
-                        ),
-                      ), */
-                      /*  SizedBox(
-                        height: 15,
-                      ),
-              
-                      GestureDetector(
-                        //1. Para que nos lleve a la página deseada
-                        onTap: () {
-                          //Aquí debe ir la función de la API
-                          //updateProduct();
-                        },
-              
-                        child: Container(
-                          width: 330,
-                          height: 40,
-                          margin: EdgeInsets.only(left: 20, right: 10, top: 20),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 245, 147, 0),
-                              borderRadius: BorderRadius.circular(4)),
-                          child: Center(
-                            child: Text(
-                              'Enviar',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      ), */
                     ],
                   ),
                 ),
